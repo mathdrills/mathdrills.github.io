@@ -10,6 +10,8 @@ let currentGame = '';
 const homeScreen = document.getElementById('home-screen');
 const timesTablesScreen = document.getElementById('times-tables-screen');
 const countingScreen = document.getElementById('counting-screen');
+const sequencingScreen = document.getElementById('sequencing-screen');
+const arithmeticScreen = document.getElementById('arithmetic-screen');
 const quizDiv = document.getElementById('quiz');
 const questionDiv = document.getElementById('question');
 const countingDisplay = document.getElementById('counting-display');
@@ -21,13 +23,19 @@ const summaryDiv = document.getElementById('summary');
 // Navigation buttons
 const timesTablesBtn = document.getElementById('times-tables-btn');
 const countingBtn = document.getElementById('counting-btn');
+const sequencingBtn = document.getElementById('sequencing-btn');
+const arithmeticBtn = document.getElementById('arithmetic-btn');
 const backFromTimes = document.getElementById('back-from-times');
 const backFromCounting = document.getElementById('back-from-counting');
+const backFromSequencing = document.getElementById('back-from-sequencing');
+const backFromArithmetic = document.getElementById('back-from-arithmetic');
 const backFromQuiz = document.getElementById('back-from-quiz');
 
 // Forms
 const setupForm = document.getElementById('setup-form');
 const countingSetupForm = document.getElementById('counting-setup-form');
+const sequencingSetupForm = document.getElementById('sequencing-setup-form');
+const arithmeticSetupForm = document.getElementById('arithmetic-setup-form');
 
 // Animal emojis for counting game
 const animals = {
@@ -39,8 +47,12 @@ const animals = {
 // Event listeners for navigation
 timesTablesBtn.addEventListener('click', () => showScreen('times-tables'));
 countingBtn.addEventListener('click', () => showScreen('counting'));
+sequencingBtn.addEventListener('click', () => showScreen('sequencing'));
+arithmeticBtn.addEventListener('click', () => showScreen('arithmetic'));
 backFromTimes.addEventListener('click', () => showScreen('home'));
 backFromCounting.addEventListener('click', () => showScreen('home'));
+backFromSequencing.addEventListener('click', () => showScreen('home'));
+backFromArithmetic.addEventListener('click', () => showScreen('home'));
 backFromQuiz.addEventListener('click', goBackFromQuiz);
 
 // Times tables setup
@@ -73,6 +85,58 @@ countingSetupForm.addEventListener('submit', function (e) {
     startQuiz();
 });
 
+// Sequencing setup
+sequencingSetupForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const numProblems = parseInt(document.getElementById('seq-problems').value, 10);
+    let start = parseInt(document.getElementById('seq-start').value, 10);
+    let end = parseInt(document.getElementById('seq-end').value, 10);
+    const before = document.getElementById('seq-before').checked;
+    const after = document.getElementById('seq-after').checked;
+
+    if (isNaN(numProblems) || numProblems < 1 || isNaN(start) || isNaN(end)) {
+        alert('Please enter valid numbers for sequencing.');
+        return;
+    }
+    if (!before && !after) {
+        alert('Please select at least one question type (Before or After).');
+        return;
+    }
+    if (start > end) {
+        // swap
+        const t = start; start = end; end = t;
+    }
+    currentGame = 'sequencing';
+    generateSequencingQuestions(numProblems, start, end, { before, after });
+    startQuiz();
+});
+
+// Arithmetic setup
+arithmeticSetupForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const numProblems = parseInt(document.getElementById('arith-problems').value, 10);
+    let start = parseInt(document.getElementById('arith-start').value, 10);
+    let end = parseInt(document.getElementById('arith-end').value, 10);
+    const add = document.getElementById('arith-add').checked;
+    const sub = document.getElementById('arith-sub').checked;
+
+    if (isNaN(numProblems) || numProblems < 1 || isNaN(start) || isNaN(end)) {
+        alert('Please enter valid numbers for arithmetic.');
+        return;
+    }
+    if (!add && !sub) {
+        alert('Please select at least one operation type (Addition or Subtraction).');
+        return;
+    }
+    if (start > end) {
+        // swap
+        const t = start; start = end; end = t;
+    }
+    currentGame = 'arithmetic';
+    generateArithmeticQuestions(numProblems, start, end, { add, sub });
+    startQuiz();
+});
+
 // Answer submission
 answerForm.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -99,6 +163,8 @@ function showScreen(screen) {
     homeScreen.style.display = 'none';
     timesTablesScreen.style.display = 'none';
     countingScreen.style.display = 'none';
+    sequencingScreen.style.display = 'none';
+    arithmeticScreen.style.display = 'none';
     quizDiv.style.display = 'none';
     summaryDiv.style.display = 'none';
 
@@ -112,6 +178,12 @@ function showScreen(screen) {
             break;
         case 'counting':
             countingScreen.style.display = '';
+            break;
+        case 'sequencing':
+            sequencingScreen.style.display = '';
+            break;
+        case 'arithmetic':
+            arithmeticScreen.style.display = '';
             break;
         case 'quiz':
             quizDiv.style.display = '';
@@ -174,6 +246,68 @@ function generateCountingQuestions(numProblems, maxCount) {
     }
 }
 
+function generateSequencingQuestions(numProblems, start, end, types) {
+    questions = [];
+    const availableTypes = [];
+    if (types.before) availableTypes.push('before');
+    if (types.after) availableTypes.push('after');
+
+    for (let i = 0; i < numProblems; i++) {
+        const type = availableTypes[Math.floor(Math.random() * availableTypes.length)];
+        let n = Math.floor(Math.random() * (end - start + 1)) + start;
+        let display, answer;
+
+        if (type === 'before') {
+            if (n === start) n++; // Ensure we can ask for the number before
+            display = `What number comes before ${n}?`;
+            answer = n - 1;
+        } else { // after
+            if (n === end) n--; // Ensure we can ask for the number after
+            display = `What number comes after ${n}?`;
+            answer = n + 1;
+        }
+
+        questions.push({
+            display: display,
+            answer: answer,
+            type: 'sequencing',
+            value: n
+        });
+    }
+}
+
+function generateArithmeticQuestions(numProblems, start, end, types) {
+    questions = [];
+    const availableTypes = [];
+    if (types.add) availableTypes.push('add');
+    if (types.sub) availableTypes.push('sub');
+
+    for (let i = 0; i < numProblems; i++) {
+        const type = availableTypes[Math.floor(Math.random() * availableTypes.length)];
+        let n1 = Math.floor(Math.random() * (end - start + 1)) + start;
+        let n2 = Math.floor(Math.random() * (end - start + 1)) + start;
+        let display, answer;
+
+        if (type === 'add') {
+            display = `${n1} + ${n2} = ?`;
+            answer = n1 + n2;
+        } else { // sub
+            if (n1 < n2) {
+                // swap to avoid negative answers
+                const t = n1; n1 = n2; n2 = t;
+            }
+            display = `${n1} - ${n2} = ?`;
+            answer = n1 - n2;
+        }
+
+        questions.push({
+            display: display,
+            answer: answer,
+            type: 'arithmetic'
+        });
+    }
+}
+
 function startQuiz() {
     current = 0;
     correct = 0;
@@ -199,6 +333,15 @@ function showQuestion() {
         questionDiv.textContent = question.display;
         countingDisplay.style.display = '';
         displayAnimals(question);
+    } else if (question.type === 'sequencing') {
+        questionDiv.textContent = question.display;
+        countingDisplay.style.display = 'none';
+    } else if (question.type === 'arithmetic') {
+        questionDiv.textContent = question.display;
+        countingDisplay.style.display = 'none';
+    } else if (question.type === 'arithmetic') {
+        questionDiv.textContent = question.display;
+        countingDisplay.style.display = 'none';
     }
 
     answerInput.value = '';
@@ -242,6 +385,10 @@ function goBackFromQuiz() {
         showScreen('times-tables');
     } else if (currentGame === 'counting') {
         showScreen('counting');
+    } else if (currentGame === 'sequencing') {
+        showScreen('sequencing');
+    } else if (currentGame === 'arithmetic') {
+        showScreen('arithmetic');
     } else {
         showScreen('home');
     }

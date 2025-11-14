@@ -219,6 +219,42 @@ button:focus {
     }
 }
 
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
+.checkbox-group label {
+    margin-right: 1.5rem;
+    margin-top: 0;
+    font-size: 1rem;
+}
+
+.flower-row {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 10px;
+    font-size: 2rem;
+    line-height: 1;
+    z-index: -1;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #ffccdd;
+}
+
+.flower-row::before {
+    content: '🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼🌷🌸🌼';
+}
+
 @media (max-width: 600px) {
     .container {
         max-width: 98vw;

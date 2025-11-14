@@ -24,6 +24,16 @@
                 <div class="btn-text">Counting</div>
                 <div class="btn-desc">Count cute animals</div>
             </button>
+            <button id="sequencing-btn" class="game-choice-btn">
+                <div class="btn-icon">➡️</div>
+                <div class="btn-text">Sequencing</div>
+                <div class="btn-desc">What number comes next?</div>
+            </button>
+            <button id="arithmetic-btn" class="game-choice-btn">
+                <div class="btn-icon">➕</div>
+                <div class="btn-text">Arithmetic</div>
+                <div class="btn-desc">Addition & Subtraction</div>
+            </button>
         </div>
 
         <!-- Times Tables Setup -->
@@ -53,6 +63,54 @@
             </form>
         </div>
 
+        <!-- Sequencing Setup -->
+        <div id="sequencing-screen" style="display:none;">
+            <h1>Sequencing</h1>
+            <button id="back-from-sequencing" class="back-btn">← Back</button>
+            <form id="sequencing-setup-form">
+                <label for="seq-problems">Number of problems:</label>
+                <input type="number" id="seq-problems" name="seq-problems" min="1" max="100" value="10" required />
+                <label for="seq-start">Start of range (x1):</label>
+                <input type="number" id="seq-start" name="seq-start" value="1" required />
+                <label for="seq-end">End of range (x2):</label>
+                <input type="number" id="seq-end" name="seq-end" value="10" required />
+
+                <label>Question type:</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="seq-before" name="seq-type" value="before">
+                    <label for="seq-before">Before</label>
+                    <input type="checkbox" id="seq-after" name="seq-type" value="after" checked>
+                    <label for="seq-after">After</label>
+                </div>
+
+                <button type="submit">Start Sequencing</button>
+            </form>
+        </div>
+
+        <!-- Arithmetic Setup -->
+        <div id="arithmetic-screen" style="display:none;">
+            <h1>Arithmetic</h1>
+            <button id="back-from-arithmetic" class="back-btn">← Back</button>
+            <form id="arithmetic-setup-form">
+                <label for="arith-problems">Number of problems:</label>
+                <input type="number" id="arith-problems" name="arith-problems" min="1" max="100" value="20" required />
+                <label for="arith-start">Start of range:</label>
+                <input type="number" id="arith-start" name="arith-start" value="1" required />
+                <label for="arith-end">End of range:</label>
+                <input type="number" id="arith-end" name="arith-end" value="10" required />
+
+                <label>Operation type:</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="arith-add" name="arith-type" value="add" checked>
+                    <label for="arith-add">Addition</label>
+                    <input type="checkbox" id="arith-sub" name="arith-type" value="sub" checked>
+                    <label for="arith-sub">Subtraction</label>
+                </div>
+
+                <button type="submit">Start Arithmetic</button>
+            </form>
+        </div>
+
         <!-- Quiz Screen (for both games) -->
         <div id="quiz" style="display:none;">
             <button id="back-from-quiz" class="back-btn">← Back</button>
@@ -69,6 +127,7 @@
         <div id="summary" style="display:none;"></div>
     </div>
     <script src="script.js"></script>
+    <div class="flower-row"></div>
 </body>
 
 </html>
